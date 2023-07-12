@@ -2,41 +2,43 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import NavBar from "../components/NavBar";
-import { fetchMovieGenres, selectMovieGenres } from "../features/genres/genresSlice";
-import bullettrain from '../assets/bullettrain.jpg';
-import btlogo from '../assets/btlogo.png';
-import { FaPlay } from "react-icons/fa";
-import { AiOutlineInfoCircle } from "react-icons/ai";
-import NewReleasesMovies from "../components/NewReleasesMovies";
-import PopularMovies from "../components/PopularMovies";
-import { firebaseAuth } from "../utils/firebase-config";
+import NavBar from "../../components/NavBar";
+import { firebaseAuth } from "../../utils/firebase-config";
 import { onAuthStateChanged } from "firebase/auth";
-import GenreSelect from "../components/GenreSelect";
-import { selectMoviesByGenre } from "../features/movies/moviesSlice";
-import MoviesCard from "../components/MoviesCard";
-import TopRatedMovies from "../components/TopRatedMovies";
+import GenreSelect from "../../components/GenreSelect";
+import TvShowCard from "../../components/TvShowCard";
+import { fetchTVGenres, selectTVGenres } from "../../features/genres/genresSlice";
+import { selectShowsByGenre } from "../../features/tvshows/tvShowsSlice";
+import newgirl from '../../assets/newgirl.jpg'
+import nglogo from '../../assets/nglogo.png'
+import { FaPlay } from "react-icons/fa";
 import { CgChevronDownO } from 'react-icons/cg';
+import { AiOutlineInfoCircle } from "react-icons/ai";
+import TopRatedTVShows from "../../components/TopRatedTVShows";
+import TrendingShows from "../../components/TrendingShows";
+import PopularShows from "../../components/PopularShows";
 
-const Movies = () => {
-    const navigate = useNavigate();
+const TvShows = () => {
+    const navigate = useNavigate()
     const dispatch = useDispatch();
     const [isSelected, setIsSelected] = useState(true); 
     const [selectedGenre, setSelectedGenre] = useState('');
-    //retrieve movie genres data from API
-    const movieGenres = useSelector(selectMovieGenres);
+
+    //retrieve tv genres
+    const tvGenres = useSelector(selectTVGenres);
     useEffect(() => {
-        dispatch(fetchMovieGenres());
-    },[dispatch]);
-    //retrieve movies by genre from API
-    const moviesByGenre = useSelector(selectMoviesByGenre);
+        dispatch(fetchTVGenres());
+    },[dispatch])
+    //retrieve tv shows by genre
+    const showsByGenre = useSelector(selectShowsByGenre);
+  
+
     //navbar scroll transition
     const [isScrolled, setIsScrolled] = useState(false);
     window.onscroll = () => {
         setIsScrolled(window.pageYOffset === 0 ? false : true);
         return () => (window.onscroll = null);
-    };
-
+    }
 
     //check if user is logged in
     onAuthStateChanged(firebaseAuth, (currentUser) => {
@@ -44,35 +46,30 @@ const Movies = () => {
             navigate('/login');
         }
     });
-  
-    //load more movies 
+    //load more shows
     const [visible, setVisible] = useState(12);
-    const showMoreMovies = () => {
-        setVisible((prevMovies) => prevMovies + 6);
-    };
-    
-
+    const showMoreShows = () => {
+        setVisible((prevShows) => prevShows + 6)
+    }
 
   return (
     <Container>
-        <NavBar isScrolled={isScrolled}/>
+        <NavBar isScrolled={isScrolled} />
         <nav id="movie-header" className={`${isScrolled ? 'on-scroll' : 'not-scroll'}`}>
             <div className="header flex a-center">
                 <div className="flex flex a-center j-center">
-                    <h1 className="title" onClick={() => window.location.reload()}>
-                        Movies
-                    </h1>
+                    <h1 className="title" onClick={() => window.location.reload()}>TV Shows</h1>
                 </div>
                 <div className="select flex">
-                    <GenreSelect genres={movieGenres} setIsSelected={setIsSelected} setSelectedGenre={setSelectedGenre}/>
+                    <GenreSelect genres={tvGenres} setIsSelected={setIsSelected} setSelectedGenre={setSelectedGenre} />
                 </div>
             </div>
         </nav>
         <div className="hero">
-            <img src={bullettrain} alt="movie" className="background-image" />
+            <img src={newgirl} alt="show" className="background-image" />
             <div className="container">
                 <div className="logo">
-                    <img src={btlogo} alt="movie-logo" />
+                    <img src={nglogo} alt="show-logo" />
                 </div>
                 <div className="buttons flex">
                     <button className="flex a-center j-center" onClick={() => navigate('/player')}>
@@ -84,37 +81,37 @@ const Movies = () => {
                 </div>
             </div>
         </div>
-        {isSelected ?
-            <div className="displays column">
+        {isSelected ? 
+            <div className="displays">
                 <div className="display-item">
-                        <NewReleasesMovies genres={movieGenres}/>
+                    <TopRatedTVShows genres={tvGenres}/>
                 </div>
                 <div className="display-item">
-                        <PopularMovies genres={movieGenres}/>
+                    <TrendingShows genres={tvGenres}/>
                 </div>
                 <div className="display-item">
-                        <TopRatedMovies genres={movieGenres}/>
+                    <PopularShows genres={tvGenres}/>
                 </div>
             </div>
             :
-            <div className="movie-genre-container">
-                <h1 className="selected-genre-header">{`${selectedGenre} Movies`}</h1>
-                <div className="genre-movies j-center">
-                    {moviesByGenre.slice(0, visible).map((movie) => (
-                        <MoviesCard movie={movie} key={movie.id} genres={movieGenres}/>
-                    ))}
+            <div className="tv-genre-container">
+                    <h1 className="selected-genre-header">{`${selectedGenre} Shows`}</h1>
+                    <div className="genre-tv j-center">
+                        {showsByGenre.slice(0, visible).map((show) => (
+                            <TvShowCard key={show.id} show={show} genres={tvGenres} />
+                        ))}
+                    </div>
+                    <button className="show-more" onClick={showMoreShows}>
+                        <CgChevronDownO />
+                    </button>
                 </div>
-                <button className="show-more" onClick={showMoreMovies}>
-                    <CgChevronDownO />
-                </button>
-            </div>
         }
     </Container>
   )
 }
 
 const Container = styled.div`
-    background-color: #141414;
+     background-color: #141414;
     .not-scroll {
         /* background-image: linear-gradient(180deg,rgba(0,0,0,.7) 15%,transparent); */
     }
@@ -135,10 +132,11 @@ const Container = styled.div`
         transition: 0.3s ease-in-out;
         .header {
             /* position: relative; */
+            gap: 3rem;
             .title {
                 position: absolute;
                 top: 2.5rem;
-                left: 9rem;
+                left: 10rem;
                 transform: translate(-50%, -50%);
                 z-index: 1;
                 font-size: 2.3rem;
@@ -147,54 +145,54 @@ const Container = styled.div`
             }
         }
   }
-    .hero {
-        position: relative;
-        .background-image {
-            filter: brightness(60%);
-            height: 100vh;
-            width: 100vw;
-        }
-        .container {
-            position: absolute;
-            bottom: 4rem;
-            .logo {
-                img {
-                    width: 50%;
-                    height: 50%;
-                    margin-left: 5rem;
+  .hero {
+      position: relative;
+      .background-image {
+        filter: brightness(60%);
+        height: 100vh;
+        width: 100vw
+      }
+      .container {
+          position: absolute;
+          bottom: 1.5rem;
+          .logo {
+              img {
+                  width: 45%;
+                  height: 45%;
+                  margin-left: 5rem;
+              }
+          }
+          .buttons {
+              margin: 5rem;
+              gap: 2rem;
+              button {
+                border-style: solid;
+                border-width: 2px;
+                background-color: white;
+                color: black;
+                font-size: 1.4rem;
+                gap: 1rem;
+                border-radius: 0.2rem;
+                padding: 0.5rem;
+                padding-left: 2rem;
+                padding-right: 2.4rem;
+                cursor: pointer;
+                transition: 0.2s ease-in-out;
+                &:hover {
+                    opacity: 0.8;
                 }
-            }
-            .buttons {
-                margin: 5rem;
-                gap: 2rem;
-                button {
-                    border-style: solid;
-                    border-width: 2px;
-                    background-color: white;
-                    color: black;
-                    font-size: 1.4rem;
-                    gap: 1rem;
-                    border-radius: 0.2rem;
-                    padding: 0.5rem;
-                    padding-left: 2rem;
-                    padding-right: 2.4rem;
-                    cursor: pointer;
-                    transition: 0.2s ease-in-out;
-                    &:hover {
-                        opacity: 0.8;
-                    }
-                    &:nth-of-type(2) {
-                        background-color: rgba(109, 109, 110, 0.7);
-                        color: white;
-                        svg {
-                            font-size: 1.8rem;
-                        }
+                &:nth-of-type(2) {
+                    background-color: rgba(109, 109, 110, 0.7);
+                    color: white;
+                    svg {
+                        font-size: 1.8rem;
                     }
                 }
-            }
-        }
-    }
-    .hero::before {
+              }
+          }
+      }
+  }
+  .hero::before {
         content:'';
         position: absolute;
         height: 100%;
@@ -217,16 +215,15 @@ const Container = styled.div`
             #111
         );
     }
-    .movie-genre-container {
+  .tv-genre-container {
         .selected-genre-header{
             position: relative;
             top: 3rem;
             left: 2rem;
-            /* margin-top: 5rem; */
             font-size: 1.7rem;
             font-weight: bold;
         }
-        .genre-movies {
+        .genre-tv {
             position: relative;
             margin-top: 5rem;
             gap: 1rem;
@@ -238,7 +235,7 @@ const Container = styled.div`
             position: relative;
             left: 43.7rem;
             margin-top: 1.5rem;
-            svg {
+            svg{
                 font-size: 2.5rem;
             }
         }
@@ -247,11 +244,11 @@ const Container = styled.div`
         position: absolute;
         margin-top: -8rem;
         display: flex;
-        /* flex-direction: column; */
+        flex-direction: column;
     }
     .display-item:not(:last-child) {
         margin-bottom: -13rem;
     }
 `;
 
-export default Movies;
+export default TvShows;

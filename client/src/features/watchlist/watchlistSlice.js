@@ -4,7 +4,7 @@ import axios from "axios";
 export const fetchWatchlist = createAsyncThunk(
     'watchlist/fetchWatchlist',
     async({email}) => {
-        const req = await axios.get(`http://localhost:4000/api/user/liked/${email}`);
+        const req = await axios.get(`http://localhost:3000/api/user/liked/${email}`);
         const resp =  req.data.movies;
         const movies = resp.map((movie) => {
             return {
@@ -24,7 +24,7 @@ export const fetchWatchlist = createAsyncThunk(
 export const addToWatchlist = createAsyncThunk(
     'watchlist/addToWatchlist',
     async({email, data}) => {
-        await axios.post('http://localhost:4000/api/user/add', {
+        await axios.post('http://localhost:3000/api/user/add', {
             email,
             data
         })
@@ -35,7 +35,7 @@ export const addToWatchlist = createAsyncThunk(
 export const removeFromWatchlist = createAsyncThunk(
     'watchlist/removeFromWatchlist',
     async({email, data}) => {
-        await axios.delete('http://localhost:4000/api/user/remove', {
+        await axios.delete('http://localhost:3000/api/user/remove', {
             data: {email, data}
         })
         return data;

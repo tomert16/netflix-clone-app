@@ -4,8 +4,8 @@ import  Login  from "./pages/Login"
 import Netflix from "./pages/Netflix"
 import  Signup  from "./pages/Signup"
 import Player from "./pages/Player"
-import Movies from "./pages/Movies";
-import TvShows from "./pages/TvShows"
+import Movies from "./pages/movies/Movies";
+import TvShows from "./pages/shows/TvShows"
 import Watchlist from "./pages/Watchlist"
 
 const App = () => {

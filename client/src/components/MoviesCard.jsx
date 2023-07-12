@@ -1,9 +1,9 @@
 import React,{ useState } from 'react';
 import styled from 'styled-components';
-import MovieInfo from '../pages/MovieInfo';
+import MovieInfo from '../pages/movies/MovieInfo';
 //for the clip add any clip to the assets foolder under the alias clip.mov
 ///uncomment the import below
-// import clip from "../assets/clip.mov";
+import clip from "../assets/clip.mov";
 import { useDispatch } from 'react-redux';
 import { IoPlayCircleSharp } from 'react-icons/io5';
 import { RiThumbUpFill, RiThumbDownFill } from 'react-icons/ri';

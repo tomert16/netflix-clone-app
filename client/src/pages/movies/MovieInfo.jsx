@@ -1,61 +1,63 @@
 import styled from 'styled-components';
+import axios from 'axios';
 import { AiFillCloseCircle } from 'react-icons/ai';
-import { API_KEY } from '../utils/constants';
+import { API_KEY } from '../../utils/constants';
 import React,{ useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 //for the clip add any clip to the assets foolder under the alias clip.mov
 ///uncomment the import below
-// import clip from "../assets/clip.mov";
-import axios from 'axios';
-import RecCard from '../components/RecCard';
+import clip from "../../assets/clip.mov";
+import { fetchMovieGenres, selectMovieGenres } from '../../features/genres/genresSlice';
+
+import RecCard from '../../components/RecCard';
 
 
-const ShowInfo = React.memo(({ show, setDisplay, genres }) => {
-    
-    //fetch video data for selected show
+const MovieInfo = React.memo(({ movie, setDisplay, filteredGenreNames }) => {
+    const dispatch = useDispatch();
     const [video, setVideo] = useState();
+    const [recommendations, setRecommendations] = useState();
+  
+    //retrieve movie genres data from API
+    const movieGenres = useSelector(selectMovieGenres)
+    useEffect(() => {
+        dispatch(fetchMovieGenres(movieGenres))
+    },[dispatch])
+
+    //fetch movie videos
     useEffect(() => {
         const fetchVideo = async() => {
-            const req = fetch (`movie/${show.id}/videos?api_key=${API_KEY}`)
-            const resp = await req
-            const parsed = await resp.json()
-            setVideo(parsed.results)
+            const req = fetch (`movie/${movie.id}/videos?api_key=${API_KEY}`);
+            const resp = await req;
+            const parsed = await resp.json();
+            setVideo(parsed.results);
         }
         fetchVideo();
-    },[show.id])
+    },[])
 
-    //fetch show recommendations
-    const [recommendations, setRecommendations] = useState();
+    //fetch recommendations for selected movie
     useEffect(() => {
-        const fetchRecommendations = async() => {
-            const req = await axios.get(`tv/${show.id}/recommendations?api_key=${API_KEY}`);
+        const fetchRecommendation = async() => {
+            const req = await axios.get(`movie/${movie.id}/recommendations?api_key=${API_KEY}`);
             setRecommendations(req.data.results);
         }
-        fetchRecommendations();
-    },[show.id])
-
+        fetchRecommendation();
+    },[])
     if (video === undefined) return null;
     if (recommendations === undefined) return null;
 
-    //exit show info 
+    //exit movie card functionality
     const handleExitInfo = () => {
         setDisplay(false);
-    }
-
-
-    //formatted date
-    const formattedDate = new Date(show.first_air_date).toLocaleDateString('en-US', {
+    };
+    //format the release date
+    const formattedDate = new Date(movie.release_date).toLocaleDateString('en-US', {
         year: 'numeric',
-        
     });
-    // map out show genres
-    const genresId = show.genre_ids.map((genre) => genre);
-    const showGenreList = genres.map((genre) => genre).filter((genre) => genresId.includes(genre.id))
-    const genreNames = showGenreList.map((genre) => genre.name)
 
 
   return (
     <Container>
-         <div className="card j-center a-center">
+        <div className="card j-center a-center">
             <button className="close-btn" onClick={handleExitInfo}>
                 <AiFillCloseCircle />
             </button>
@@ -66,9 +68,10 @@ const ShowInfo = React.memo(({ show, setDisplay, genres }) => {
                 src={`https://www.youtube.com/embed/${video[0].key}?autoplay=1&controls=0`}
                 title="YouTube Video"
                 frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; controls"
                 allowFullScreen
-            ></iframe> : 
+            ></iframe>
+            :
             <video
                 className="video"
                 src={clip}
@@ -76,18 +79,18 @@ const ShowInfo = React.memo(({ show, setDisplay, genres }) => {
                 loop 
                 controls 
                 muted
-            ></video>
+            />
             }
-            {/* <h2 className="title">{show.name}</h2> */}
+            {/* <h2 className="title">{movie.title}</h2> */}
             <div className="extra-info flex j-between">
-                <h2>{formattedDate}</h2>
-                <h2>{`Genres: ${genreNames.map((genre) => genre).join(', ')}`}</h2>
+                <h2 className="date">{formattedDate}</h2>
+                <h2 className="genres">{`Genres: ${filteredGenreNames.map(((genre) => genre)).join(', ')}`}</h2>
             </div><br/>
-            <p className="description">{show.overview}</p>
+            <p className='description'>{movie.overview}</p>
             <h1>More Like This</h1>
             <div className="recommendations">
                 {recommendations.slice(0,9).map((recommendation) => (
-                    <RecCard recommendation={recommendation} />
+                    <RecCard recommendation={recommendation} isMovie/>
                 ))}
             </div>
         </div>
@@ -102,8 +105,7 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  /* cursor: pointer; */
-  background: rgba(0,0,0,.5);
+  background: rgba(0,0,0,0.5);
   height: 100%;
   left: 0;
   position: fixed;
@@ -112,17 +114,17 @@ const Container = styled.div`
   z-index: 1000;
   .card {
     overflow-x: scroll;
+    position: relative;
     width: 60%;
     height: 90%;
     border-radius: 15px;
     background: #292929;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 50px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 26px -18px inset;
-    position: relative;
     .video {
-            height: 50%;
-            width: 100%;
-            object-fit: cover;
-        }
+        height: 50%;
+        width: 100%;
+        object-fit: cover;
+    }
     .close-btn {
         position: absolute;
         right: 1rem;
@@ -141,34 +143,33 @@ const Container = styled.div`
         word-wrap: break-word;
         width: 40rem;
     }
-    .description {
-        width: 25rem;
-        font-size: 1rem;
-        margin-left: 1rem;
-    }
     .extra-info{
-        /* position: relative; */
         bottom: 11rem;
         margin-left: 1rem;
         margin-right: 1rem;
         
+    }
+    .description {
+        width: 25rem;
+        font-size: 1rem;
+        margin-left: 1rem;
     }
     .genres {
         margin-left: 2rem;
     }
 }
 h1 {
-    margin-top: 3rem;
-    margin-left: 2rem;
-    font-size: 1.8rem;
-    font-weight: bold;
-}
-.recommendations {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minMax(14rem, 1fr));
-    grid-gap: 1rem;
-    margin-left: 1.5rem;
-}
+      margin-left: 2rem;
+      margin-top: 3rem;
+      font-weight: bold;
+      font-size: 1.8rem;
+  }
+  .recommendations {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minMax(14rem, 1fr));
+      grid-gap: 1rem;
+      margin-left: 1.5rem;
+  }
 `;
 
-export default ShowInfo
+export default MovieInfo

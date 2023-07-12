@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import React,{ useState } from 'react';
-import ShowInfo from '../pages/ShowInfo';
+import ShowInfo from '../pages/shows/ShowInfo';
 //for the clip add any clip to the assets foolder under the alias clip.mov
 ///uncomment the import below
-// import clip from "../assets/clip.mov";
+import clip from "../assets/clip.mov";
 import { IoPlayCircleSharp } from 'react-icons/io5';
 import { RiThumbUpFill, RiThumbDownFill } from 'react-icons/ri';
 import { CgChevronDownO } from 'react-icons/cg';
