@@ -2,9 +2,7 @@ import styled from 'styled-components';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { API_KEY } from '../../utils/constants';
 import React,{ useEffect, useState } from 'react';
-//for the clip add any clip to the assets foolder under the alias clip.mov
-///uncomment the import below
-import clip from "../../assets/clip.mov";
+import clip from "../../assets/clip.mp4";
 import axios from 'axios';
 import RecCard from '../../components/RecCard';
 

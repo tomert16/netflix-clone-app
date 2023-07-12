@@ -4,9 +4,7 @@ import { AiFillCloseCircle } from 'react-icons/ai';
 import { API_KEY } from '../../utils/constants';
 import React,{ useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-//for the clip add any clip to the assets foolder under the alias clip.mov
-///uncomment the import below
-import clip from "../../assets/clip.mov";
+import clip from "../../assets/clip.mp4";
 import { fetchMovieGenres, selectMovieGenres } from '../../features/genres/genresSlice';
 
 import RecCard from '../../components/RecCard';

@@ -1,9 +1,7 @@
 import styled from "styled-components";
 import { BsArrowLeft } from "react-icons/bs"
 import { useNavigate } from "react-router-dom";
-//for the player clip add any clip to the assets foolder under the alias clip.mov
-///uncomment the import below
-import clip from "../assets/clip.mov";
+import clip from "../assets/clip.mp4";
 
 const Player = () => {
     const navigate = useNavigate();
