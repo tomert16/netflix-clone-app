@@ -1,6 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { API_KEY } from "../../utils/constants";
+// import { API_KEY } from "../../utils/constants";
+
+//API KEY
+const API_KEY = process.env.REACT_APP_API_KEY
 
 export const fetchTopRatedTVShows = createAsyncThunk(
     'tvShows/fetchTopRatedTVShows',

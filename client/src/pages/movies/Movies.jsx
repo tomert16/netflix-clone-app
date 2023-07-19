@@ -18,6 +18,8 @@ import MoviesCard from "../../components/MoviesCard";
 import TopRatedMovies from "../../components/TopRatedMovies";
 import { CgChevronDownO } from 'react-icons/cg';
 
+
+
 const Movies = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -50,7 +52,6 @@ const Movies = () => {
     const showMoreMovies = () => {
         setVisible((prevMovies) => prevMovies + 6);
     };
-    
 
 
   return (
@@ -64,7 +65,7 @@ const Movies = () => {
                     </h1>
                 </div>
                 <div className="select flex">
-                    <GenreSelect genres={movieGenres} setIsSelected={setIsSelected} setSelectedGenre={setSelectedGenre}/>
+                    <GenreSelect genres={movieGenres} setIsSelected={setIsSelected} setSelectedGenre={setSelectedGenre} visible={visible} setVisible={setVisible}/>
                 </div>
             </div>
         </nav>

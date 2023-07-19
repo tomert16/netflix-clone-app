@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import netflixbg from '../assets/netflixCloneBg.jpg';
 import Header from '../components/Header';
 import { firebaseAuth } from '../utils/firebase-config';
+
 const Landing = () => {
     const navigate = useNavigate();
 
@@ -13,7 +14,7 @@ const Landing = () => {
         }
     })
 
-
+    
   return (
     <Container>
         <div class="bg-image" style={{backgroundImage: `url(${netflixbg})`, backgroundSize: 'cover'}}>

@@ -1,13 +1,15 @@
 import styled from 'styled-components';
 import axios from 'axios';
 import { AiFillCloseCircle } from 'react-icons/ai';
-import { API_KEY } from '../../utils/constants';
+// import { API_KEY } from '../../utils/constants'; 
 import React,{ useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import clip from "../../assets/clip.mp4";
 import { fetchMovieGenres, selectMovieGenres } from '../../features/genres/genresSlice';
-
 import RecCard from '../../components/RecCard';
+
+//API KEY
+const API_KEY = process.env.REACT_APP_API_KEY
 
 
 const MovieInfo = React.memo(({ movie, setDisplay, filteredGenreNames }) => {

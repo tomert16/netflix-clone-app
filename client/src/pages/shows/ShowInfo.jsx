@@ -1,11 +1,13 @@
 import styled from 'styled-components';
 import { AiFillCloseCircle } from 'react-icons/ai';
-import { API_KEY } from '../../utils/constants';
+// import { API_KEY } from '../../utils/constants';
 import React,{ useEffect, useState } from 'react';
 import clip from "../../assets/clip.mp4";
 import axios from 'axios';
 import RecCard from '../../components/RecCard';
 
+//API KEY
+const API_KEY = process.env.REACT_APP_API_KEY
 
 const ShowInfo = React.memo(({ show, setDisplay, genres }) => {
     

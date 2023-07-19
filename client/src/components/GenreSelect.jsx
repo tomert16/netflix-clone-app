@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { fetchMoviesByGenre } from '../features/movies/moviesSlice';
 import { fetchShowsByGenre } from '../features/tvshows/tvShowsSlice';
 
-const GenreSelect = React.memo(({ genres, setIsSelected, setSelectedGenre }) => {
+const GenreSelect = React.memo(({ genres, setIsSelected, setSelectedGenre, setVisible }) => {
     const dispatch = useDispatch();
 
     const handleIsSelected = () => {
@@ -16,15 +16,16 @@ const GenreSelect = React.memo(({ genres, setIsSelected, setSelectedGenre }) => 
         const selectedGenre = genres.find((genre) => genre.id === parseInt(genreId));
         if (selectedGenre) {
             setSelectedGenre(selectedGenre.name)
-    
+            
             dispatch(fetchMoviesByGenre({
                 genres, genre: genreId
             })); 
-    
+            
             dispatch(fetchShowsByGenre({
                 genres, genre: genreId
             }));
-    
+            
+            setVisible(12);
             handleIsSelected();
         } else {
             setSelectedGenre('')

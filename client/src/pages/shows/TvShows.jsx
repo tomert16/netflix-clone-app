@@ -61,7 +61,7 @@ const TvShows = () => {
                     <h1 className="title" onClick={() => window.location.reload()}>TV Shows</h1>
                 </div>
                 <div className="select flex">
-                    <GenreSelect genres={tvGenres} setIsSelected={setIsSelected} setSelectedGenre={setSelectedGenre} />
+                    <GenreSelect genres={tvGenres} setIsSelected={setIsSelected} setSelectedGenre={setSelectedGenre} setVisible={setVisible}/>
                 </div>
             </div>
         </nav>

@@ -1,7 +1,10 @@
 import { async } from "@firebase/util";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { API_KEY, TMDB_BASE_URL } from "../../utils/constants";
+import {TMDB_BASE_URL } from "../../utils/constants";
+
+//API KEY
+const API_KEY = process.env.REACT_APP_API_KEY
 
 export const fetchMovieGenres = createAsyncThunk(
     'genres/fetchMovieGenres',
