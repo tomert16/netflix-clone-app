@@ -24,7 +24,7 @@
 + SQLite3
 # To start:
 + Backend: navigate to the backend directory with `cd server`
-+ Install the Node dependencies: npm install
++ Install the Node dependencies: `npm install`
 ## To run database and start the server:
-+ run node `models/UserModel.js` to create the database table
++ run `node models/UserModel.js` to create the database table
 + Start server with: `node server.js`
