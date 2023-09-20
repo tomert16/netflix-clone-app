@@ -27,4 +27,4 @@
 + Install the Node dependencies: npm install
 ## To run database and start the server:
 + run node `models/UserModel.js` to create the database table
-+ Start server with: `node server.js`
++ Start server with: `npm start`
